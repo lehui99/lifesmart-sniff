@@ -8,5 +8,10 @@
 <h1 align="center">LifeSmart智慧中心Sniff</h1>
 <p>　　最近正在体验<a href="http://www.ilifesmart.com/">LifeSmart</a>智能家居产品。本文主要记录了对LifeSmart产品网络通讯的嗅探。</p>
 <p>　　在实际拿到LifeSmart产品之前，简单浏览了一下其官网，发现其中一篇文章《<a href="http://www.ilifesmart.com/blog/article2016111701.html">让美国噩梦般大规模断网的，居然是国产摄像头！</a>》（文章截图如下）。看完这篇文章，初步感觉LifeSmart的通讯环节安全性还是做得不错的，对LifeSmart有了初步的好感。<br>　　<img src="lifesmart_article2016111701.jpg" alt=""></p>
+<p>　　前几天拿到了LifeSmart的智慧中心和一个智慧插座，初步试用还算方便，可以通过网络远程控制，可以设置定时开关，在没有外网的情况下只要手机和智慧中心在同一个WiFi下还可以通过本地模式进行控制。其中只有智慧中心需要联网，其他设备比如智慧插座、超级碗、智能门锁等都是和智慧中心之间通过射频进行通讯。所以，在这里只记录对智慧中心的Sniff过程。</p>
+<p>　　回到几天前刚安装好LifeSmart Android APP，看到APP版本为1.0.8p2 [J1,58f03c2f]，智慧中心版本为1.0.37p5。智慧中心详情中显示其是Linux系统、以及其MAC地址，DNS在路由器DHCP的基础上增加了4项（114.114.114.114、208.67.222.222、208.67.222.220、8.8.8.8）。<br>　　<img src="app-1.jpg" alt=""><br><br>　　<img src="app-2.jpg" alt=""><br><br>　　<img src="app-3.jpg" alt=""></p>
+<p>　　APP更新显示1.0.8p2已为最新版本，但智慧中心版本可以进行升级，遂升级了智慧中心的版本。重启智慧中心后看到其版本为1.0.39。在此基础上，开始了Sniff的过程。</p>
+<p>　　首先Sniff的是接上智慧中心的网线并通电后的情况，通过Sniff看到智慧中心启动后首先会进行对时，之后会通过TCP连接到121.199.14.200:18894。<br>　　<img src="sniff-1.jpg" alt=""><br><br>　　<img src="sniff-2.jpg" alt=""><br><br></p>
+<p>　　通过跟踪TCP流，发现连接中服务器返回的数据里注册APP时的邮箱和用户编号赫然在目（LifeSmart智慧中心同一时间只能有一个Owner，Owner可以添加其他家庭成员）。除此之外，还有一些token、uuid等信息，还能看到智慧中心的版本号。这些信息全都是明文发送和接收的，没有任何加密，似乎和之前其官网blog中描述的不符。<br>　　<img src="sniff-3.jpg" alt=""></p>
 </body>
 </html>
